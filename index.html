@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css">
+<script src="Javascript/select.js"></script>
+<script src="Javascript/data.js"></script>
+<script src="Javascript/jquery.csv.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request for Payment</title>
+</head>
+
+<body>
+    <label for="rfp-date">RFP Date</label>
+    <input type="date" id="rfp-date" name="rfp-date">
+    
+    <br>
+
+    <form name="form1" id="form1" action="/action_page.php">
+        Subjects: <select name="subject" id="subject">
+            <option value="" selected="selected">Select subject</option>
+        </select>
+    <br>
+        Topics: <select name="topic" id="topic">
+            <option value="" selected="selected">Please select subject first</option>
+        </select>
+    <br>
+        Chapters: <select name="chapter" id="chapter">
+            <option value="" selected="selected">Please select topic first</option>
+        </select>
+    <br>
+    <input type="submit" value="Submit"> 
+    </form>
+
+    <script>
+        var csv_file_API = './Dataset/company.csv';
+        $.ajax({
+            type: 'GET',
+            url: csv_file_API,
+            dataType: 'text',
+
+            error: function (e) {
+                alert('An error occurred while processing API calls');
+                console.log("API call Failed: ", e);
+            },
+
+            success: function (data) {
+
+                var jsonData = $.csv.toObjects(data);
+
+                console.log(jsonData);
+
+                $.each(jsonData, function (index, value) {
+
+                    $('#showCSV').append(
+
+                        '<li class="list-group-item d-flex justify-content-between align-items-center">' + 
+                            
+                            '<span style="margin-right: 2rem; font-size: 2rem; font-weight: bold; color: #37474F">' +
+                                value['FIRST NAME'] +
+                            '</span>' +
+
+                            '<span style="margin-right: 2rem; font-size: 2rem; font-weight: bold; color: #37474F">' +
+                                value['LAST NAME'] +
+                            '</span>' +
+
+                            '<span class="badge badge-primary badge-pill">' +
+                                value.CITY +
+                            '</span>' +
+
+                            '<span class="badge warning-color-dark badge-pill">' + 
+                                value['PHONE NUMBER'] +
+                            '</span>' +
+
+                            '<span class="badge success-color-dark badge-pill">' +
+                                value['EMAIL ADDRESS'] +
+                            '</span>' +
+
+                        '</li>'
+                    );
+
+                });
+
+            } // end: Ajax success API call
+
+}); // end: of Ajax call
+
+    </script>
+
+</body>
+</html>
